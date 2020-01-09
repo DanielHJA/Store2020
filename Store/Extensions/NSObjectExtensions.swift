@@ -14,4 +14,10 @@ extension NSObject {
             completion()
         }
     }
+    
+    func hapticFeedBack(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
+    
 }

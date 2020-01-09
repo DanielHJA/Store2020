@@ -133,6 +133,7 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
 extension CartViewController: PKPaymentAuthorizationViewControllerDelegate {
     
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
+        hapticFeedBack(style: .medium)
         Core.shared.delete(objects: items)
         dismiss(animated: true, completion: nil) // PKPaymentAuthorizationViewController
         dismiss(animated: true, completion: nil) // CartViewController
