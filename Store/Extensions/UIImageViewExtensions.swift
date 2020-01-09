@@ -10,6 +10,7 @@ import UIKit
 
 extension UIImageView {
     func loadAsync(_ url: URL?) {
+        image = UIImage(named: "imagePlaceholder")
         DispatchQueue.global().async {
             guard let url = url else { return }
             do {

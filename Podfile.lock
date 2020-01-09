@@ -1,0 +1,20 @@
+PODS:
+  - lottie-ios (3.1.5)
+  - Stripe (18.3.0)
+
+DEPENDENCIES:
+  - lottie-ios
+  - Stripe
+
+SPEC REPOS:
+  trunk:
+    - lottie-ios
+    - Stripe
+
+SPEC CHECKSUMS:
+  lottie-ios: 32bf84389337d86fbc8b12266e88452e0abf1dee
+  Stripe: 35b9a54e698c82163d2ef105187a996d009fd386
+
+PODFILE CHECKSUM: 22d5f77823ed2148400a8d9b5894588a05948c36
+
+COCOAPODS: 1.8.4

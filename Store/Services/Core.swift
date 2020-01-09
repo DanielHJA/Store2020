@@ -23,10 +23,10 @@ class Core: NSObject {
         return appDelegate.persistentContainer
     }()
     
-    private lazy var context: NSManagedObjectContext = {
+    lazy var context: NSManagedObjectContext = {
         return appDelegate.persistentContainer.viewContext
     }()
-    
+        
     func fetch<T: NSManagedObject>(type: T.Type, predicate: NSPredicate? = nil, completion: @escaping ([T]) -> ()) {
         let request = NSFetchRequest<T>(entityName: T.identifier)
         request.returnsObjectsAsFaults = false
@@ -50,6 +50,10 @@ class Core: NSObject {
         context.delete(object)
         print("Object deleted")
         save()
+    }
+    
+    func delete(objects: [NSManagedObject]) {
+        objects.forEach { delete(object: $0) }
     }
     
     func save() {
@@ -79,6 +83,12 @@ class Core: NSObject {
         let predicate = NSPredicate(format: "id = %@", id)
         fetch(type: T.self, predicate: predicate) { (results) in
             completion(results.isEmpty ? false : true)
+        }
+    }
+
+    func hasProductsInCart(completion: @escaping (Bool, Int) -> Void) {
+        fetch(type: Product.self) { (results) in
+            completion(results.count > 0, results.count)
         }
     }
     

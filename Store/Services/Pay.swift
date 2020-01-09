@@ -38,6 +38,7 @@ class Pay: NSObject {
             request.countryCode = "US"
             request.merchantIdentifier = "merchant.com.daniel.hjartstrom.Store"
             request.merchantCapabilities = .capability3DS
+            request.requiredBillingContactFields = [.postalAddress, .name, .phoneNumber]
             request.supportedNetworks = paymentNetworks
             request.paymentSummaryItems = items
             
