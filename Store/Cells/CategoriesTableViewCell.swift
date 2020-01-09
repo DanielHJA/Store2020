@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoriesTableViewCell: UITableViewCell {
+class CategoriesTableViewCell: BaseTableViewCell<String> {
 
     private lazy var label: UILabel = {
         let temp = UILabel()
@@ -26,7 +26,7 @@ class CategoriesTableViewCell: UITableViewCell {
         return temp
     }()
     
-    func configure(_ string: String) {
+    override func configure(_ string: String) {
         label.text = string
     }
     
