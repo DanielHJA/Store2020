@@ -41,7 +41,7 @@ class CategoriesViewController: BaseTableViewViewController<ProductContainer> {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         super.tableView(tableView, didSelectRowAt: indexPath)
         let controller = ProductListViewController()
-        controller.items = items[indexPath.row].products
+        controller.items = [items[indexPath.row]]
         navigationController?.pushViewController(controller, animated: true)
     }
     

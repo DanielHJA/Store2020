@@ -114,6 +114,11 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
         return UISwipeActionsConfiguration(actions: [addAction])
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.delegate?.transactionCompleted()
+    }
+    
     func updatePrice() {
         let totalPrice = items.reduce(0) { $0 + $1.price }
         summaryView.price = totalPrice
@@ -132,9 +137,6 @@ extension CartViewController: PKPaymentAuthorizationViewControllerDelegate {
         dismiss(animated: true, completion: nil) // PKPaymentAuthorizationViewController
         dismiss(animated: true, completion: nil) // CartViewController
         completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
-        delay(duration: 1.0) {
-            self.delegate?.transactionCompleted()
-        }
     }
      
      func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
