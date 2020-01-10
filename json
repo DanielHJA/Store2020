@@ -1,0 +1,8 @@
+A	Store/BaseViewModel.swift
+M	Store/Controllers/BaseTableViewViewController.swift
+M	Store/Controllers/BaseViewController.swift
+M	Store/Controllers/CategoriesViewController.swift
+M	Store/Controllers/ProductListViewController.swift
+A	Store/ViewModels/CartViewModel.swift
+A	Store/ViewModels/CategoryViewModel.swift
+A	Store/ViewModels/ProductListViewModel.swift

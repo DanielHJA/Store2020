@@ -20,3 +20,23 @@ extension Data {
         return nil
     }
 }
+
+extension Encodable {
+
+    func encoded() -> Data? {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(self)
+            return data
+        } catch let error {
+            print(error)
+        }
+        return nil
+    }
+    
+    func json() -> String? {
+        guard let data = encoded() else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+    
+}

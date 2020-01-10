@@ -15,9 +15,8 @@ protocol TransactionCompletionDelegate: class {
     func transactionCompleted()
 }
 
-class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDataSource {
+class CartViewController: BaseTableViewViewController<Product> {
     
-    var items = [Product]()
     weak var delegate: TransactionCompletionDelegate?
     
     override var viewControllerTitle: String? {
@@ -27,23 +26,7 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
     override var showsCart: Bool {
          return false
      }
-    
-    private lazy var tableView: UITableView = {
-        let temp = UITableView()
-        temp.delegate = self
-        temp.dataSource = self
-        temp.tableFooterView = UIView()
-        temp.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        temp.register(ProductTableViewCell.self, forCellReuseIdentifier: "ProductTableViewCell")
-        view.addSubview(temp)
-        temp.translatesAutoresizingMaskIntoConstraints = false
-        temp.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        temp.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        temp.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        temp.bottomAnchor.constraint(equalTo: summaryView.topAnchor).isActive = true
-        return temp
-    }()
-    
+
     private lazy var summaryView: SummaryView = {
         let temp = SummaryView()
         temp.delegate = self
@@ -61,8 +44,8 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
         fetch()
     }
     
-    func fetch() {
-        Core.shared.fetch(type: Product.self) { [weak self] products in
+    override func fetch() {
+        File.shared.fetchCart { [weak self] (products) in
             self?.items = products
             self?.tableView.reloadData()
             self?.updatePrice()
@@ -70,61 +53,54 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    override func registerCells() {
+        tableView.register(CartProductTableViewCell.self, forCellReuseIdentifier: "CartProductTableViewCell")
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProductTableViewCell", for: indexPath) as? ProductTableViewCell else { return UITableViewCell() }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CartProductTableViewCell", for: indexPath) as? CartProductTableViewCell else { return UITableViewCell() }
         let item = items[indexPath.row]
+        cell.delegate = self
+        cell.indexPath = indexPath
         cell.configure(item) 
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 130.0
     }
     
     @available(iOS 11.0, *)
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let addAction = UIContextualAction(style: .normal, title: "Remove from cart") { (action, view, completion) in
             completion(true)
-            let item = self.items[indexPath.row]
-            Core.shared.delete(object: item)
-            self.items.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.updatePrice()
-            self.toggleBuyButton()
-            
-            if self.items.count == 0 {
-                self.delay(duration: 0.5) {
-                     self.dismiss(animated: true, completion: nil)
-                }
-            }
+            self.removeProductFromCart(indexPath: indexPath)
         }
         addAction.backgroundColor = UIColor(red: 0.615, green: 0.001, blue: 0.095, alpha: 1.00)
         return UISwipeActionsConfiguration(actions: [addAction])
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.delegate?.transactionCompleted()
+    private func removeProductFromCart(indexPath: IndexPath) {
+        self.items.remove(at: indexPath.row)
+        File.shared.saveProducts(self.items)
+        NotificationCenter.default.post(name: NSNotification.Name("cartUpdated"), object: nil, userInfo: nil)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        self.updatePrice()
+        self.toggleBuyButton()
+        
+        if self.items.count == 0 {
+            self.delay(duration: 0.5) {
+                 self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
-    func updatePrice() {
+    private func updatePrice() {
         let totalPrice = items.reduce(0) { $0 + $1.price }
         summaryView.price = totalPrice
     }
     
-    func toggleBuyButton() {
+    private func toggleBuyButton() {
         summaryView.buttonIsEnabled = items.count > 0
     }
 
@@ -134,10 +110,13 @@ extension CartViewController: PKPaymentAuthorizationViewControllerDelegate {
     
     func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
         hapticFeedBack(style: .medium)
-        Core.shared.delete(objects: items)
+        File.shared.clearCart()
         dismiss(animated: true, completion: nil) // PKPaymentAuthorizationViewController
         dismiss(animated: true, completion: nil) // CartViewController
         completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
+        delay(duration: 0.5) {
+            self.delegate?.transactionCompleted()
+        }
     }
      
      func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
@@ -154,5 +133,12 @@ extension CartViewController: PaymentDelegate {
     }
 }
 
-
-
+extension CartViewController: CartProductTableViewCellDelegate {
+    func removeProductAtIndexPath(_ indexPath: IndexPath) {
+        Alert.alertWithQuestion(presentingViewController: self, title: "Remove Product", message: "Are you sure you want to remove this product from your cart?", okCompletion: {
+            self.removeProductFromCart(indexPath: indexPath)
+        }, cancelCompletion: {
+            
+        })
+    }
+}

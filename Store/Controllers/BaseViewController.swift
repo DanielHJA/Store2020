@@ -18,6 +18,10 @@ class BaseViewController: UIViewController {
         return true
     }
     
+    var webServiceURL: String? {
+        return nil
+    }
+    
     private lazy var cartBarButtonItem: BadgedButtonItem = {
         let temp = BadgedButtonItem(with: UIImage(systemName: "cart"))
         temp.tintColor = UIColor.white
@@ -31,23 +35,23 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         title = viewControllerTitle
+        configureObservers()
         if showsCart { navigationItem.rightBarButtonItem = cartBarButtonItem }
         checkProductsInCart()
-        configureObservers()
     }
     
     private func configureObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: Core.shared.context)
+        NotificationCenter.default.addObserver(self, selector: #selector(cartUpdated), name: NSNotification.Name("cartUpdated"), object: nil)
     }
     
-    @objc func managedObjectContextObjectsDidChange(_ notification: Notification){
+    @objc private func cartUpdated() {
         checkProductsInCart()
     }
     
     private func checkProductsInCart() {
-        Core.shared.hasProductsInCart { [weak self] hasProducts, count in
-            self?.cartBarButtonItem.isEnabled = hasProducts
-            self?.cartBarButtonItem.badgeValue = hasProducts ? count : 0
+        File.shared.cartHasItems { [weak self] (status, count) in
+            self?.cartBarButtonItem.isEnabled = status
+            self?.cartBarButtonItem.badgeValue = count
         }
     }
     

@@ -15,6 +15,11 @@ class ProductListViewController: BaseTableViewViewController<ProductContainer> {
         title = items.first?.title
     }
     
+    override func registerCells() {
+        super.registerCells()
+        tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "ProductTableViewCell")
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items[section].products.count
     }
@@ -39,7 +44,8 @@ class ProductListViewController: BaseTableViewViewController<ProductContainer> {
         let addAction = UIContextualAction(style: .normal, title: "Add to cart") { (action, view, completion) in
             completion(true)
             let item = self.items[indexPath.section].products[indexPath.row]
-            item.addToCart()
+            File.shared.addToCart(item)
+            NotificationCenter.default.post(name: NSNotification.Name("cartUpdated"), object: nil, userInfo: nil)
         }
         addAction.backgroundColor = UIColor(red: 0.000, green: 0.572, blue: 0.000, alpha: 1.00)
         return UISwipeActionsConfiguration(actions: [addAction])

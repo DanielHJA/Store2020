@@ -16,18 +16,15 @@ class Pay: NSObject {
     let paymentNetworks: [PKPaymentNetwork] = [.amex, .discover, .masterCard, .visa]
     
     func configureSummaryItem(_ item: Product) -> PKPaymentSummaryItem? {
-        guard let name = item.name else { return nil }
-        return PKPaymentSummaryItem(label: name, amount: NSDecimalNumber(value: item.price))
+        return PKPaymentSummaryItem(label: item.name, amount: NSDecimalNumber(value: item.price))
     }
     
     func configureSummaryItems(_ items: [Product]) -> [PKPaymentSummaryItem] {
         var tempArray = [PKPaymentSummaryItem]()
         for item in items {
-            if let name = item.name {
-                let current = PKPaymentSummaryItem(label: name, amount: NSDecimalNumber(value: item.price))
+            let current = PKPaymentSummaryItem(label: item.name, amount: NSDecimalNumber(value: item.price))
                 tempArray.append(current)
             }
-        }
         return tempArray
     }
     

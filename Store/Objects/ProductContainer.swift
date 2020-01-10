@@ -11,7 +11,7 @@ import UIKit
 struct ProductContainer: Decodable {
 
     var title: String
-    var products: [ProductObject]
+    var products: [Product]
     
     private enum CodingKeys: String, CodingKey {
         case title = "title"
@@ -21,7 +21,7 @@ struct ProductContainer: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         title = try container.decode(String.self, forKey: .title)
-        products = try container.decode([ProductObject].self, forKey: .products)
+        products = try container.decode([Product].self, forKey: .products)
     }
     
 }

@@ -12,16 +12,11 @@ class BaseTableViewViewController<T: Decodable>: BaseViewController, UITableView
     
     var items = [T]()
     
-    var webServiceURL: String? {
-        return nil
-    }
-    
     lazy var tableView: UITableView = {
         let temp = UITableView()
         temp.delegate = self
         temp.dataSource = self
         temp.tableFooterView = UIView()
-        temp.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         view.addSubview(temp)
         temp.translatesAutoresizingMaskIntoConstraints = false
         temp.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -37,8 +32,7 @@ class BaseTableViewViewController<T: Decodable>: BaseViewController, UITableView
     }
     
     func registerCells() {
-        tableView.register(ProductTableViewCell.self, forCellReuseIdentifier: "ProductTableViewCell")
-        tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: "CategoriesTableViewCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     func reload() {
@@ -59,7 +53,7 @@ class BaseTableViewViewController<T: Decodable>: BaseViewController, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,7 +77,7 @@ class BaseTableViewViewController<T: Decodable>: BaseViewController, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40.0
+        return tableView.numberOfSections > 1 ? 40.0 : 0
     }
     
     @available(iOS 11.0, *)

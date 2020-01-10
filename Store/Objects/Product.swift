@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-struct ProductObject: Decodable {
+struct Product: Codable {
 
     var id: Int
     var name: String
@@ -34,26 +34,16 @@ struct ProductObject: Decodable {
         productDescription = try container.decode(String.self, forKey: .productDescription)
     }
     
-    init(id: Int, name: String, price: Double, thumbnail: URL?, productDescription: String) {
-        self.id = id
-        self.name = name
-        self.price = price
-        self.thumbnail = thumbnail
-        self.productDescription = productDescription
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(price, forKey: .price)
+        try container.encode(thumbnail, forKey: .thumbnail)
+        try container.encode(productDescription, forKey: .productDescription)
     }
     
 }
 
-extension ProductObject {
-    func addToCart() {
-        Core.shared.add(type: Product.self) { (product) in
-            product.name = self.name
-            product.price = self.price
-            product.thumbnail = self.thumbnail
-            product.productDescription = self.productDescription
-            Core.shared.save()
-        }
-    }
-}
 
 

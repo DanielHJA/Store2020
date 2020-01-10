@@ -23,6 +23,11 @@ class CategoriesViewController: BaseTableViewViewController<ProductContainer> {
         fetch()
     }
     
+    override func registerCells() {
+        super.registerCells()
+        tableView.register(CategoriesTableViewCell.self, forCellReuseIdentifier: "CategoriesTableViewCell")
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }

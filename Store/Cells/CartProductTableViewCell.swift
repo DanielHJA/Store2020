@@ -1,14 +1,21 @@
 //
-//  ProductTableViewCell.swift
+//  CartProductTableViewCell.swift
 //  Store
 //
-//  Created by Daniel Hjärtström on 2020-01-07.
+//  Created by Daniel Hjärtström on 2020-01-10.
 //  Copyright © 2020 Daniel Hjärtström. All rights reserved.
 //
 
 import UIKit
 
-class ProductTableViewCell: BaseTableViewCell<Product> {
+protocol CartProductTableViewCellDelegate: class {
+    func removeProductAtIndexPath(_ indexPath: IndexPath)
+}
+
+class CartProductTableViewCell: BaseTableViewCell<Product> {
+    
+    weak var delegate: CartProductTableViewCellDelegate?
+    var indexPath: IndexPath?
     
     private lazy var content: UIView = {
         let temp = UIView()
@@ -38,7 +45,7 @@ class ProductTableViewCell: BaseTableViewCell<Product> {
         temp.textColor = UIColor.black
         temp.textAlignment = .left
         temp.minimumScaleFactor = 0.7
-        temp.numberOfLines = 2
+        temp.numberOfLines = 3
         temp.adjustsFontSizeToFitWidth = true
         temp.font = UIFont.systemFont(ofSize: 15.0, weight: .bold)
         addSubview(temp)
@@ -65,10 +72,56 @@ class ProductTableViewCell: BaseTableViewCell<Product> {
         return temp
     }()
     
+    private lazy var stepper: UIStepper = {
+        let temp = UIStepper()
+        temp.minimumValue = 0
+        temp.stepValue = 1.0
+        temp.addTarget(self, action: #selector(changeStepperValue), for: .touchUpInside)
+        temp.tintColor = UIColor.blue
+        temp.backgroundColor = UIColor.clear
+        temp.value = 0
+        content.addSubview(temp)
+        temp.translatesAutoresizingMaskIntoConstraints = false
+        temp.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10.0).isActive = true
+        temp.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10.0).isActive = true
+        temp.bottomAnchor.constraint(equalTo: content.bottomAnchor).isActive = true
+        return temp
+    }()
+    
+    private lazy var stepperLabel: UILabel = {
+        let temp = UILabel()
+        temp.text = "0"
+        temp.textColor = UIColor.black
+        temp.textAlignment = .center
+        temp.minimumScaleFactor = 0.7
+        temp.numberOfLines = 1
+        temp.adjustsFontSizeToFitWidth = true
+        temp.font = UIFont.systemFont(ofSize: 16.0, weight: .medium)
+        content.addSubview(temp)
+        temp.translatesAutoresizingMaskIntoConstraints = false
+        temp.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -10.0).isActive = true
+        temp.bottomAnchor.constraint(equalTo: content.bottomAnchor).isActive = true
+        return temp
+    }()
+    
     override func configure(_ product: Product) {
         thumbnailImageView.loadAsync(product.thumbnail)
         nameLabel.text = product.name
         priceLabel.text = product.price.toCurrency()
+        stepper.isHidden = false
+        stepperLabel.isHidden = false
     }
     
+    @objc private func changeStepperValue(sender: UIStepper) {
+        let value = sender.value
+        
+        if value == 0 {
+            if let indexPath = indexPath {
+                delegate?.removeProductAtIndexPath(indexPath)
+            }
+        } else {
+            stepperLabel.text = "\(Int(value))"
+        }
+    }
+
 }
