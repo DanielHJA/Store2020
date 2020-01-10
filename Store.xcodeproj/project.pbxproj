@@ -21,6 +21,7 @@
 		7B1DEEE723C7584C00BFBCCB /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1DEEE623C7584C00BFBCCB /* CategoriesTableViewCell.swift */; };
 		7B6743E823C72CB200A00951 /* TransactionCompletionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6743E723C72CB200A00951 /* TransactionCompletionViewController.swift */; };
 		7B68DD8423C8A5CA00BD8418 /* CartProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B68DD8323C8A5CA00BD8418 /* CartProductTableViewCell.swift */; };
+		7B68DD8623C8A70500BD8418 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B68DD8523C8A70500BD8418 /* Alert.swift */; };
 		7B69F26C23C5C16000B61D5E /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69F26B23C5C16000B61D5E /* DataExtensions.swift */; };
 		7B69F26E23C5C16C00B61D5E /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69F26D23C5C16C00B61D5E /* UIImageViewExtensions.swift */; };
 		7B69F27123C5C2F600B61D5E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69F27023C5C2F600B61D5E /* BaseViewController.swift */; };
@@ -84,6 +85,7 @@
 		7B1DEEE623C7584C00BFBCCB /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		7B6743E723C72CB200A00951 /* TransactionCompletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCompletionViewController.swift; sourceTree = "<group>"; };
 		7B68DD8323C8A5CA00BD8418 /* CartProductTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartProductTableViewCell.swift; sourceTree = "<group>"; };
+		7B68DD8523C8A70500BD8418 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		7B69F26B23C5C16000B61D5E /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		7B69F26D23C5C16C00B61D5E /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7B69F27023C5C2F600B61D5E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				7B69F27223C5C30C00B61D5E /* BaseTableViewViewController.swift */,
 				7B69F27B23C5DF3000B61D5E /* CustomNavigationController.swift */,
 				7B6743E723C72CB200A00951 /* TransactionCompletionViewController.swift */,
+				7B68DD8523C8A70500BD8418 /* Alert.swift */,
 				7B0160A723C5F14000F60D54 /* ViewController.swift */,
 				7B0160A923C5F2EF00F60D54 /* CartViewController.swift */,
 			);
@@ -607,6 +610,7 @@
 				7B69F27E23C5E05F00B61D5E /* Core.swift in Sources */,
 				7B69F27823C5DB7400B61D5E /* HeaderView.swift in Sources */,
 				7B0160AE23C606D800F60D54 /* SummaryView.swift in Sources */,
+				7B68DD8623C8A70500BD8418 /* Alert.swift in Sources */,
 				7B1DEEE723C7584C00BFBCCB /* CategoriesTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -81,7 +81,9 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CartProductTableViewCell", for: indexPath) as? CartProductTableViewCell else { return UITableViewCell() }
         let item = items[indexPath.row]
-        cell.configure(item) 
+        cell.product = item
+        cell.indexPath = indexPath
+        cell.delegate = self
         return cell
     }
     
@@ -111,20 +113,16 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
         self.updatePrice()
         self.toggleBuyButton()
         
-        if self.items.count == 0 {
-            self.delay(duration: 0.5) {
-                 self.dismiss(animated: true, completion: nil)
+        Core.shared.hasProductsInCart { (status, count) in
+            if count == 0 {
+                self.dismiss(animated: true, completion: nil)
             }
         }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.delegate?.transactionCompleted()
+
     }
     
     func updatePrice() {
-        let totalPrice = items.reduce(0) { $0 + $1.price }
+        let totalPrice = items.reduce(0) { $0 + (Double($1.count) * $1.price) }
         summaryView.price = totalPrice
     }
     
@@ -142,6 +140,9 @@ extension CartViewController: PKPaymentAuthorizationViewControllerDelegate {
         dismiss(animated: true, completion: nil) // PKPaymentAuthorizationViewController
         dismiss(animated: true, completion: nil) // CartViewController
         completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
+        delay(duration: 0.5) {
+            self.delegate?.transactionCompleted()
+        }
     }
      
      func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
@@ -159,7 +160,18 @@ extension CartViewController: PaymentDelegate {
 }
 
 extension CartViewController: CartProductTableViewCellDelegate {
+    
     func removeProductAtIndexPath(_ indexPath: IndexPath) {
-        removeItemWithIndexPath(indexPath)
+        Alert.alertWithQuestion(presentingViewController: self, title: "Remove Product", message: "Are your sure you want to remove the product from your cart?", okCompletion: { [weak self] in
+            self?.removeItemWithIndexPath(indexPath)
+        }) { [weak self] in
+            self?.items[indexPath.row].count = 1
+            Core.shared.save()
+        }
     }
+    
+    func cartChanged() {
+        updatePrice()
+    }
+    
 }

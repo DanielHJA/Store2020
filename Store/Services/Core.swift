@@ -79,8 +79,8 @@ class Core: NSObject {
         }
     }
     
-    func checkIdExist<T: NSManagedObject>(type: T.Type, id: String, completion: @escaping (Bool) -> ()) {
-        let predicate = NSPredicate(format: "id = %@", id)
+    func checkIdExist<T: NSManagedObject>(type: T.Type, parameter: String, value: String, completion: @escaping (Bool) -> ()) {
+        let predicate = NSPredicate(format: "\(parameter) = %@", value)
         fetch(type: T.self, predicate: predicate) { (results) in
             completion(results.isEmpty ? false : true)
         }
@@ -88,7 +88,8 @@ class Core: NSObject {
 
     func hasProductsInCart(completion: @escaping (Bool, Int) -> Void) {
         fetch(type: Product.self) { (results) in
-            completion(results.count > 0, results.count)
+            let count = results.reduce(0) { $0 + $1.count }
+            completion(results.count > 0, Int(count))
         }
     }
     

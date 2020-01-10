@@ -10,12 +10,23 @@ import UIKit
 
 protocol CartProductTableViewCellDelegate: class {
     func removeProductAtIndexPath(_ indexPath: IndexPath)
+    func cartChanged()
 }
 
 class CartProductTableViewCell: BaseTableViewCell<Product> {
     
     weak var delegate: CartProductTableViewCellDelegate?
     var indexPath: IndexPath?
+    
+    var product: Product! {
+        didSet {
+            thumbnailImageView.loadAsync(product.thumbnail)
+            nameLabel.text = product.name
+            priceLabel.text = product.price.toCurrency()
+            stepper.value = Double(product.count)
+            changeStepperValue()
+        }
+    }
     
     private lazy var content: UIView = {
         let temp = UIView()
@@ -76,10 +87,9 @@ class CartProductTableViewCell: BaseTableViewCell<Product> {
         let temp = UIStepper()
         temp.minimumValue = 0
         temp.stepValue = 1.0
-        temp.addTarget(self, action: #selector(changeStepperValue), for: .touchUpInside)
+        temp.addTarget(self, action: #selector(changeStepperValue), for: .valueChanged)
         temp.tintColor = UIColor.blue
         temp.backgroundColor = UIColor.clear
-        temp.value = 0
         content.addSubview(temp)
         temp.translatesAutoresizingMaskIntoConstraints = false
         temp.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 10.0).isActive = true
@@ -104,16 +114,8 @@ class CartProductTableViewCell: BaseTableViewCell<Product> {
         return temp
     }()
     
-    override func configure(_ product: Product) {
-        thumbnailImageView.loadAsync(product.thumbnail)
-        nameLabel.text = product.name
-        priceLabel.text = product.price.toCurrency()
-        stepper.isHidden = false
-        stepperLabel.isHidden = false
-    }
-    
-    @objc private func changeStepperValue(sender: UIStepper) {
-        let value = sender.value
+    @objc private func changeStepperValue() {
+        let value = stepper.value
         
         if value == 0 {
             if let indexPath = indexPath {
@@ -121,6 +123,8 @@ class CartProductTableViewCell: BaseTableViewCell<Product> {
             }
         } else {
             stepperLabel.text = "\(Int(value))"
+            product.setCount(Int(value))
+            delegate?.cartChanged()
         }
     }
 

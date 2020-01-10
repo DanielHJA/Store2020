@@ -14,3 +14,10 @@ extension NSManagedObject {
         return String(describing: self)
     }
 }
+
+extension Product {
+    func setCount(_ value: Int) {
+        self.count = Int32(value)
+        Core.shared.save()
+    }
+}
