@@ -20,6 +20,7 @@
 		7B1DEEE523C757D000BFBCCB /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1DEEE423C757D000BFBCCB /* CategoriesViewController.swift */; };
 		7B1DEEE723C7584C00BFBCCB /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1DEEE623C7584C00BFBCCB /* CategoriesTableViewCell.swift */; };
 		7B6743E823C72CB200A00951 /* TransactionCompletionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6743E723C72CB200A00951 /* TransactionCompletionViewController.swift */; };
+		7B68DD8423C8A5CA00BD8418 /* CartProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B68DD8323C8A5CA00BD8418 /* CartProductTableViewCell.swift */; };
 		7B69F26C23C5C16000B61D5E /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69F26B23C5C16000B61D5E /* DataExtensions.swift */; };
 		7B69F26E23C5C16C00B61D5E /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69F26D23C5C16C00B61D5E /* UIImageViewExtensions.swift */; };
 		7B69F27123C5C2F600B61D5E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B69F27023C5C2F600B61D5E /* BaseViewController.swift */; };
@@ -82,6 +83,7 @@
 		7B1DEEE423C757D000BFBCCB /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		7B1DEEE623C7584C00BFBCCB /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		7B6743E723C72CB200A00951 /* TransactionCompletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCompletionViewController.swift; sourceTree = "<group>"; };
+		7B68DD8323C8A5CA00BD8418 /* CartProductTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartProductTableViewCell.swift; sourceTree = "<group>"; };
 		7B69F26B23C5C16000B61D5E /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		7B69F26D23C5C16C00B61D5E /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		7B69F27023C5C2F600B61D5E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				7B1DEEE623C7584C00BFBCCB /* CategoriesTableViewCell.swift */,
+				7B68DD8323C8A5CA00BD8418 /* CartProductTableViewCell.swift */,
 				7BF9734323C4CA4900BFE988 /* ProductTableViewCell.swift */,
 				7BF9734723C4CA9500BFE988 /* BaseTableViewCell.swift */,
 			);
@@ -585,6 +588,7 @@
 				7B1DEED823C7361100BFBCCB /* LottieAnimationView.swift in Sources */,
 				7B6A520E23C60E980074F921 /* Pay.swift in Sources */,
 				7B69F28323C5E12D00B61D5E /* Database.xcdatamodeld in Sources */,
+				7B68DD8423C8A5CA00BD8418 /* CartProductTableViewCell.swift in Sources */,
 				7BF9734C23C4CBA600BFE988 /* Webservice.swift in Sources */,
 				7B69F27C23C5DF3000B61D5E /* CustomNavigationController.swift in Sources */,
 				7BF9734623C4CA7300BFE988 /* ProductObject.swift in Sources */,

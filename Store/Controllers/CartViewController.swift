@@ -34,7 +34,7 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
         temp.dataSource = self
         temp.tableFooterView = UIView()
         temp.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        temp.register(ProductTableViewCell.self, forCellReuseIdentifier: "ProductTableViewCell")
+        temp.register(CartProductTableViewCell.self, forCellReuseIdentifier: "CartProductTableViewCell")
         view.addSubview(temp)
         temp.translatesAutoresizingMaskIntoConstraints = false
         temp.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -79,14 +79,14 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProductTableViewCell", for: indexPath) as? ProductTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CartProductTableViewCell", for: indexPath) as? CartProductTableViewCell else { return UITableViewCell() }
         let item = items[indexPath.row]
         cell.configure(item) 
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        return 130.0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -97,21 +97,25 @@ class CartViewController: BaseViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let addAction = UIContextualAction(style: .normal, title: "Remove from cart") { (action, view, completion) in
             completion(true)
-            let item = self.items[indexPath.row]
-            Core.shared.delete(object: item)
-            self.items.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.updatePrice()
-            self.toggleBuyButton()
-            
-            if self.items.count == 0 {
-                self.delay(duration: 0.5) {
-                     self.dismiss(animated: true, completion: nil)
-                }
-            }
+            self.removeItemWithIndexPath(indexPath)
         }
         addAction.backgroundColor = UIColor(red: 0.615, green: 0.001, blue: 0.095, alpha: 1.00)
         return UISwipeActionsConfiguration(actions: [addAction])
+    }
+    
+    private func removeItemWithIndexPath(_ indexPath: IndexPath) {
+        let item = self.items[indexPath.row]
+        Core.shared.delete(object: item)
+        self.items.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        self.updatePrice()
+        self.toggleBuyButton()
+        
+        if self.items.count == 0 {
+            self.delay(duration: 0.5) {
+                 self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -154,5 +158,8 @@ extension CartViewController: PaymentDelegate {
     }
 }
 
-
-
+extension CartViewController: CartProductTableViewCellDelegate {
+    func removeProductAtIndexPath(_ indexPath: IndexPath) {
+        removeItemWithIndexPath(indexPath)
+    }
+}
