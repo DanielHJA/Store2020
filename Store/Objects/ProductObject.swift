@@ -46,7 +46,7 @@ struct ProductObject: Decodable {
 
 extension ProductObject {
     func addToCart() {
-        Core.shared.checkIdExist(type: Product.self, parameter: "id", value: self.id) { (exists) in
+        Core.shared.checkIfObjectExist(type: Product.self, parameter: "id", value: self.id) { (exists) in
             if exists {
                 let predicate = NSPredicate(format: "id = %@", self.id)
                 Core.shared.fetch(type: Product.self, predicate: predicate) { (products) in

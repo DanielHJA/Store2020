@@ -79,7 +79,7 @@ class Core: NSObject {
         }
     }
     
-    func checkIdExist<T: NSManagedObject>(type: T.Type, parameter: String, value: String, completion: @escaping (Bool) -> ()) {
+    func checkIfObjectExist<T: NSManagedObject>(type: T.Type, parameter: String, value: String, completion: @escaping (Bool) -> ()) {
         let predicate = NSPredicate(format: "\(parameter) = %@", value)
         fetch(type: T.self, predicate: predicate) { (results) in
             completion(results.isEmpty ? false : true)

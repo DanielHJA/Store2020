@@ -34,7 +34,6 @@ class LottieAnimationView: UIView {
     init(name: String) {
         self.init()
         lottieView = AnimationView(name: name)
-//        lottieView.loopMode = .loop
         lottieView.contentMode = .scaleAspectFit
         addSubview(lottieView)
         lottieView.translatesAutoresizingMaskIntoConstraints = false
